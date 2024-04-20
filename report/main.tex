@@ -1,0 +1,100 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=black]{hyperref} %sets hyperlink colour
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{roboto} % for Roboto Slab font
+\usepackage{float}
+\usepackage{titling} 
+\usepackage{blindtext}\usepackage{titlesec}
+\usepackage[square,sort,comma,numbers]{natbib}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{tikz}
+\usepackage{geometry}
+\usepackage{sectsty}
+\usepackage{amsmath}
+\usepackage{tikzpagenodes}
+\usepackage{booktabs}
+\usepackage{listings}
+\geometry{a4paper, margin=2cm}
+\allsectionsfont{\color{black}} %sets colour for all headers
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\sectionfont{\fontfamily{RobotoSlab-TLF}\selectfont}
+
+%%%%%% DOCUMENT START %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%% Title Page
+\begin{titlepage}
+    \fontfamily{RobotoSlab-TLF}\selectfont 
+    \vspace*{3cm}
+    
+    \centering
+    {\Huge \textbf{\textcolor{black}{Final Report}}}\\[1.5cm]
+    \textsc{\LARGE Computational Geometry}\\[0.5cm]
+    \text{\large CS6319.001}\\[2cm]
+    
+    {\Large \textbf{\textcolor{black}{Authors:}}}\\[0.5cm]
+    \begin{tabular}{c}
+        \Large \textcolor{black}{Nicholas Zolton (ngz200000)} \\
+    \end{tabular}\\[2cm]
+    
+    {\Large \textcolor{black}{\today}}
+    
+    \vfill
+\end{titlepage}
+
+%%% Create a table of contents
+\tableofcontents
+\newpage
+
+%%% Introduction Page
+\addcontentsline{toc}{section}{Introduction}
+\section*{Introduction}
+
+%%% Methodology Page
+\section{Methodology}
+This section has a subsection.
+\subsection{Subsection}
+This subsection contains \autoref{eq:1}.
+\begin{equation}
+\label{eq:1}
+    h(r) = \cfrac{Q}{2\pi T} ln(\cfrac{r_i}{r_0})+h_0
+\end{equation}
+
+%%% Results Page
+\section{Results}
+
+%%% Discussion Page
+\section{Discussion}
+\newpage
+
+%%% References Page
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{apalike}
+\bibliography{ref}
+
+\end{document}
+
+%%%%%% DOCUMENT END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% defined colors
+\definecolor{utdorange}{RGB}{232, 117, 0}
+
+%%% Sample Code
+
+% Sample introduction text with a sample reference \cite{HussFarinotti2014}. Oh and here a sample figure with a sample caption, see \autoref{fig:random line}.
+
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=0.6\textwidth]{images/Sample graph.png}
+% \caption{A graph of something.}
+% \label{fig:random line}
+% \end{figure}
