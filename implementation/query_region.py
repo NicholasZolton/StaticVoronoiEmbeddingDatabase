@@ -1,14 +1,10 @@
 import pickle
 from matplotlib import pyplot as plt
+import numpy as np
 from openTSNE import TSNE, TSNEEmbedding
 from openai import OpenAI
-from kirkpatrick_master.kirkpatrick import Kirkpatrick
-from kirkpatrick_master.polygons import Point, Polygon
-from kirkpatrick_master.drawing import plot_polygon, plot_polygons
-from kirkpatrick_master.hull import quickhull
-import logging
-
-logging.basicConfig(level=logging.DEBUG)
+from shapely.geometry import Polygon, Point
+from shapely.strtree import STRtree
 
 
 def main():
@@ -29,7 +25,7 @@ def main():
         voronoi = pickle.load(f)
 
     # try to add a new point to the tsne model
-    lime = "color: lime"
+    lime = "color: essence of grass"
 
     client = OpenAI()
 
@@ -66,42 +62,25 @@ def main():
     # plot the new point
     plt.scatter(new_point[0], new_point[1], c="red", s=10)
 
-    # turn the polygons into kirkpatrick polygons
-    kirkpatrick_polygons = []
-    for index, polygon in enumerate(polygons):
-        polygon_points = []
-        for point in polygon:
-            polygon_points.append(Point(point[0], point[1]))
+    # turn all the polygons into shapely polygons
+    shapely_polygons = [Polygon(polygon) for polygon in polygons]
 
-        # make sure the polygon is closed by performing quick hull
-        hull = quickhull(polygon_points)
-        polygon_points = hull
-        kirkpatrick_polygon = Polygon(polygon_points)
+    # visualize the query point
+    plt.scatter(new_point[0], new_point[1], c="red", s=5)
 
-        kirkpatrick_polygon.name = color_names[index]
-        kirkpatrick_polygons.append(kirkpatrick_polygon)
-
-    # add a bounding box
-    kirkpatrick_polygons.append(
-        Polygon(
-            [
-                Point(voronoi.min_bound[0] - 1.0, voronoi.min_bound[1] - 1.0),
-                Point(voronoi.max_bound[0] + 1.0, voronoi.min_bound[1] - 1.0),
-                Point(voronoi.max_bound[0] + 1.0, voronoi.max_bound[1] + 1.0),
-                Point(voronoi.min_bound[0] - 1.0, voronoi.max_bound[1] + 1.0),
-            ]
-        )
+    # create the STRTree to query the polygons
+    records = [
+        {"geometry": polygon, "value": color}
+        for polygon, color in zip(shapely_polygons, color_names)
+    ]
+    tree = STRtree([record["geometry"] for record in records])
+    items = np.array([record["value"] for record in records])
+    items.take(tree.query(Point(new_point))).tolist()
+    print(
+        "Nearest color: %s"
+        % items.take(tree.query_nearest(Point(new_point[0], new_point[1]))).tolist()
     )
 
-    # plot_polygons(kirkpatrick_polygons)
-
-    # create the kirkpatrick data structure
-    locator = Kirkpatrick(kirkpatrick_polygons)
-    print("data structure made")
-    # query_point = Point(new_point[0], new_point[1])
-    # located_tile = locator.locate(query_point)
-    # print(located_tile)
-    # print("point located")
     plt.show()
 
 

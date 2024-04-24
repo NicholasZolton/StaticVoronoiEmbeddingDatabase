@@ -88,24 +88,6 @@ def voronoi_finite_polygons_2d(vor, plt, points, radius=None):
     regions = new_regions
     vertices = np.asarray(new_vertices)
 
-    # make a color map for the points
-    input_file = open("colors.csv", "r")
-    all_lines = input_file.readlines()
-    colors = []
-    for line in all_lines:
-        split_line = line.split(",")
-        colors.append(split_line[1].strip())
-    input_file.close()
-
-    # colorize
-    for index, region in enumerate(new_regions):
-        polygon = vertices[region]
-        plt.fill(*zip(*polygon), alpha=0.4, c=colors[index])
-
-    plt.scatter(points[:, 0], points[:, 1], c=colors, s=0.8)
-    plt.xlim(vor.min_bound[0] - 0.1, vor.max_bound[0] + 0.1)
-    plt.ylim(vor.min_bound[1] - 0.1, vor.max_bound[1] + 0.1)
-
     return regions, vertices
 
 
