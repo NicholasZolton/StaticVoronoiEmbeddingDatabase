@@ -201,7 +201,6 @@ class NDVoronoiDatabase:
         plt.xlim(self.voronoi.min_bound[0] - 0.1, self.voronoi.max_bound[0] + 0.1)
         plt.ylim(self.voronoi.min_bound[1] - 0.1, self.voronoi.max_bound[1] + 0.1)
 
-    # TODO: make this method return the site of the query
     def query_input(self, input_string: str, visualize: bool = False):
         """
         Query the voronoi diagram with a string.

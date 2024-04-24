@@ -25,7 +25,7 @@ def main():
         voronoi = pickle.load(f)
 
     # try to add a new point to the tsne model
-    lime = "color: essence of grass"
+    lime = "color: lime"
 
     client = OpenAI()
 
