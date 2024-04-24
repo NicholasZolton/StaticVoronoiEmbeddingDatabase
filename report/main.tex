@@ -11,7 +11,8 @@
 \usepackage{roboto} % for Roboto Slab font
 \usepackage{float}
 \usepackage{titling} 
-\usepackage{blindtext}\usepackage{titlesec}
+\usepackage{blindtext}
+\usepackage{titlesec}
 \usepackage[square,sort,comma,numbers]{natbib}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{tikz}
@@ -21,11 +22,16 @@
 \usepackage{tikzpagenodes}
 \usepackage{booktabs}
 \usepackage{listings}
+\usepackage{url}
 \geometry{a4paper, margin=2cm}
 \allsectionsfont{\color{black}} %sets colour for all headers
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 \sectionfont{\fontfamily{RobotoSlab-TLF}\selectfont}
+\usepackage{setspace}
+\usepackage{scrextend}
+\doublespacing
+\changefontsizes{12pt}
 
 %%%%%% DOCUMENT START %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -49,14 +55,16 @@
     {\Large \textcolor{black}{\today}}
     
     \vfill
+\addtocounter{page}{-2}
 \end{titlepage}
 
 %%% Create a table of contents
 \tableofcontents
+\addtocounter{page}{-1}
 \newpage
 
 %%% Introduction Page
-\addcontentsline{toc}{section}{Introduction}
+% \addcontentsline{toc}{section}{Introduction}
 \section*{Introduction}
 
 \section{Reason for Study}
@@ -215,15 +223,60 @@ simply using T-SNE to reduce the dimensionality of the embeddings, we
 will instead need to either create a multivariate regressor to predict
 the 2D space embeddings from the 1536D embeddings or use a regressor to
 minimize the loss between the 2D space embeddings and the 1536D embeddings
-directly, as was done in a paper by Laurens Matten\cite{LaurensMaaten2009}.
+directly, as was done in a paper by Laurens Matten\cite{laurensMaaten2009}.
 \newline
 
 \noindent
 Luckily for us, however, this was already implemented in openTSNE, a Python
 library that allows for the training of a regressor to predict the 2D space
 embeddings from the 1536D embeddings. This is perfect for our use case, as
-it allows us to create a function that will allow us to query the nearest
-neighbor to a new point. 
+it enables us to create a query point inside of the 2D space without having
+to worry about the dimensionality reduction process. So, with this in mind,
+we can now move on to creating the querying function. This function will
+simply follow a few steps:
+
+\begin{enumerate}
+    \item Take in a new input (string).
+    \item Embed the input into 1536D space.
+    \item Use the regressor to predict the 2D space embeddings.
+    \item Find the cell that the new point is in.
+    \item Return the point in that cell as the nearest neighbor.
+    \item If we want more than one nearest neighbor, explore nearby cells and return those as well.
+\end{enumerate}
+
+\noindent
+This is a fairly simple process at a high level, but it will require a bit of work
+to implement. First, we will need to sanity-check the regressor to make sure it is
+working correctly.
+
+\subsection{Sanity-Checking the Regressor}
+To sanity-check the regressor, we will need to embed a new point into 1536D space,
+predict the 2D space embeddings, and then plot the new point into our Voronoi diagram
+to make sure it is in the correct cell. While I know this is not the most solid
+method of checking the validity of the method, it is a good first step for making
+sure that the queries make at least a little bit of sense. So, with this in mind,
+I decided to embed the word "lime". Below is the result of the sanity check test:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{images/query_sanity_check.png}
+\caption{Sanity Check of the regressor. The word "lime" is embedded into 2D space and plotted into the Voronoi diagram.}
+\label{fig:sanitycheck}
+\end{figure}
+
+\noindent
+While it is a bit difficult to quantify how well the overall process is
+working, it is clear that the regressor is at least somewhat working since
+we can see that the new point for "lime" is in the correct area, as it is 
+grouped with the majority of the other "green" colors and is paired 
+specifically with a bright green! Personally, I also tried this with a few
+other colors and received similarly accurate results, but due to brevity
+I will leave those out for now. So, now that we have proven that placing 
+new points into the Voronoi diagram is viable, we can move on to the next
+step of doing planar point location to actually find what the nearest 
+neighbor is for our new queried point.
+
+\subsection{Planar Point Location}
 
 %%% References Page
 \newpage

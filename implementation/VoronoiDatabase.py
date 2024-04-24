@@ -21,6 +21,7 @@ class AIVoronoiDatabase:
         self.coordinates_with_colors: list[tuple[float, float, str]] = []
         self.voronoi: Voronoi | None = None
         self.colors = colors
+        self.polygons = []
 
         # first step is to create the embeddings
         client = OpenAI()
@@ -97,6 +98,8 @@ class AIVoronoiDatabase:
             new_region = np.array(new_region)[np.argsort(angles)]
             self.regions.append(new_region)
 
+        self.polygons = [self.vertices[region] for region in self.regions]
+
     def visualize_coordinates(self, plot):
         """
         Visualize the coordinates of the Voronoi diagram.
@@ -116,8 +119,7 @@ class AIVoronoiDatabase:
         Visualize the Voronoi diagram.
         """
 
-        for index, region in enumerate(self.regions):
-            polygon = self.vertices[region]
+        for index, polygon in enumerate(self.polygons):
             plot.fill(
                 *zip(*polygon), alpha=0.4, c=self.coordinates_with_colors[index][2]
             )
