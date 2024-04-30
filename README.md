@@ -16,6 +16,10 @@ Install the required packages:
 
 `pip install -r requirements.txt`
 
+Also, since this library requires the use of OpenAI's Embedding model, you will need to make sure you add your OpenAI API key to your environment variables. You can do this by adding the following line to your `.bashrc` or `.bash_profile`:
+
+`export OPENAI_API_KEY="your-api-key-here"`
+
 # Usage
 
 Since this is meant to be used as a library but also exists as a standalone project/report, the usage is split into two parts within the `implementation` directory:
@@ -27,3 +31,17 @@ Second, there's all of the other files in `implementation`. While these are mess
 # Report
 
 The report for this project can be found in the `report` directory. It is a LaTeX document that explains the project, the process, and the results in detail. `report/ref.bib` contains all of the references used in the report, and `report/main.pdf` is the compiled report.
+
+# Citing
+
+If you use this project in your research or project, please cite it using the following BibTeX:
+
+```
+@misc{
+	voronoiDatabase,
+	author = {Nicholas Zolton},
+	title = {Static Voronoi Embedding Database},
+	year = {2024},
+	howpublished = {\url{https://github.com/NicholasZolton/StaticVoronoiEmbeddingDatabase}}
+}
+```
