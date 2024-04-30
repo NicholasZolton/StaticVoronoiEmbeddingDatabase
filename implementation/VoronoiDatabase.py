@@ -8,7 +8,7 @@ import numpy as np
 from shapely.geometry import Polygon, Point
 from shapely.strtree import STRtree
 
-
+# credit to https://stackoverflow.com/questions/20515554/colorize-voronoi-diagram for most of the code in this function, as without it I would not have been able to colorize the diagram so cleanly
 def voronoi_finite_polygons_2d(vor, plt, points, radius=None):
     """
     Reconstruct infinite voronoi regions in a 2D diagram to finite

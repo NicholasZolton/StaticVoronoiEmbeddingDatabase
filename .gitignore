@@ -47,3 +47,8 @@ target/
 
 # Mac
 .DS_Store
+
+# Python
+.venv
+.vscode
+__pycache__
